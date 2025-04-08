@@ -2,7 +2,7 @@ fejlesztési lehetőségek:
 - akku fesz mérés
 - átrakni hogy az esp modul mindig kapjon tápot
 
-v2.0
+v2.0 
 - hely felszabadítása az ESP-n
 - ellegantota automatikus redirect
 - update.html törlése
