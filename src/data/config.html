@@ -1,0 +1,121 @@
+<!DOCTYPE HTML><html>
+<head>
+  <title>LX790 fűnyíró beállítások</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="de" http-equiv="Content-Language">
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <link rel="icon" type="image/png" href="robomower.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="topnav">
+    <h1 id="hostname">LX790.1 Robotfűnyíró beálíltások</h1>
+    <h3><a href="/">[vissza]</a></h3>
+  </div>
+  <div class="content">
+    <div class="card config">
+      <h2>Általános beállítások</h2>
+      <label for="cfg_name">Hosztnév:</label> <input type="text" id="cfg_name" name="name" placeholder="LX79x" ><br>
+      <label for="cfg_pin">Fűnyíró PIN:</label> <input type="password" id="cfg_pin" name="pin" placeholder="1234" maxlength="4" > <button class="togglePassword" for="cfg_pin"">&#x1F441;</button> <br>
+      <label for="cfg_captivePortal">WEB login:</label> <input type="checkbox" id="cfg_captivePortal" name="captivePortal" ><br>
+      <label for="cfg_portalPassword">WEB jelszó:</label> <input type="text" id="cfg_portalPassword" name="portalPassword" placeholder="portal" ><br>
+      <label for="cfg_portalTimeout">Portál timeout [s]:</label> <input type="number" id="cfg_portalTimeout" name="portalTimeout" placeholder="600" ><br>
+    </div>
+    <div class="card config">
+      <h2>Wifi beállítások</h2>
+      <label for="cfg_wifiSSID">SSID:</label> <input type="text" id="cfg_wifiSSID" name="wifiSSID" placeholder="SSID" ><br>
+      <label for="cfg_wifiPassword">Jelszó:</label> <input type="password" id="cfg_wifiPassword" name="wifiPassword" placeholder="password" > <button class="togglePassword" for="cfg_wifiPassword">&#x1F441;</button><br>
+    </div>
+    <div class="card config">
+      <h2>MQTT beállítások</h2>
+      <label for="cfg_mqtt_server_ip">MQTT szerver IP:</label> <input type="text" id="cfg_mqtt_server_ip" name="mqtt_server_ip" placeholder="MQTT_IP" ><br>
+      <label for="cfg_mqtt_port">MQTT szerver port:</label> <input type="text" id="cfg_mqtt_port" name="mqtt_port" placeholder="MQTT_port" ><br>
+      <label for="cfg_mqtt_user">MQTT user:</label>  <input type="text" id="cfg_mqtt_user" name="mqtt_user" placeholder="MQTT_user" ><br>
+      <label for="cfg_mqtt_password">Jelszó:</label> <input type="password" id="cfg_mqtt_password" name="mqtt_password" placeholder="password" > <button class="togglePassword" for="cfg_mqtt_password">&#x1F441;</button><br>
+      <label for="cfg_mqtt_topic">MQTT topic:</label> <input type="text" id="cfg_mqtt_topic" name="mqtt_topic" placeholder="mqtt_topic" ><br>
+    </div>
+    <P>A mentés gombra kattintva az ESP32 újraindul.</P>
+    <button id="btn_save" class="button buttonSmall">Mentés</button>
+  </div>
+
+
+  <script>
+
+    function togglePassword(event) {
+      var targetId = event.srcElement.getAttribute("for");
+      if ( targetId ) {
+        var input = document.getElementById(targetId);
+        if ( input.getAttribute("type") == "password" )
+          input.setAttribute("type", "text");
+        else
+          input.setAttribute("type", "password");
+      }
+
+    }
+
+    window.addEventListener('load', onLoad);
+    function onLoad(event) 
+    {
+      console.log('...init');
+
+      // load config
+      fetch('config.json')
+        .then((response) => response.json())
+        .then((data) => {
+          for (var key in data) {
+            var el = document.getElementById("cfg_"+key);
+            if (el) {
+              if ( el.type=="checkbox" )
+                el.checked = data[key];
+              else
+                el.value = data[key];
+            }
+          }
+        });
+
+      // save config
+      document.getElementById("btn_save").addEventListener("click", ()=>{
+
+        var data = {}
+        for (var el of document.getElementsByTagName("input")) {
+          var key = el.name;
+          if ( el.type=="checkbox" )
+            value = el.checked;
+          else if ( el.type=="number" )
+            value = parseInt(el.value);
+          else
+            value = el.value.trim();
+
+          data[key] = value;
+        }
+
+        console.log(data)
+
+        fetch('config.json', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data, null, 1),
+        })
+          .then(()=>{
+            alert("Sikeres mentés!"); 
+          })
+
+      });
+
+      // inif form
+      for (var el of document.getElementsByClassName("togglePassword") ) {
+        el.addEventListener("click",  togglePassword);
+        var targetId = el.getAttribute("for");
+        if ( targetId ) {
+          var input = document.getElementById(targetId);
+          input.style.width = "8em";
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

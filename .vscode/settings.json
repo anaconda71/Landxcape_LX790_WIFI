@@ -1,0 +1,8 @@
+{
+    "cmake.configureOnOpen": false,
+    "files.associations": {
+        "functional": "cpp",
+        "cstddef": "cpp",
+        "string": "cpp"
+    }
+}

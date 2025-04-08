@@ -1,0 +1,81 @@
+fejlesztési lehetőségek:
+- akku fesz mérés
+- átrakni hogy az esp modul mindig kapjon tápot
+
+v2.0
+- hely felszabadítása az ESP-n
+- ellegantota automatikus redirect
+- update.html törlése
+- ellegantota eltávolítása
+- régi hw_model eltávolítása
+- lx790_util.cpp pin beírás ok gomb után time rnövelés 250ms-ről 400-ra
+- remove autounlock tick if wifi present, always unlock automatically
+
+v1.9
+- mqtt adatok webes felületen történő megadása
+
+v1.8
+- hibajavítások
+
+v0.1.7
+- buildok megszűnése, build dátum automatizálása
+- wifi térerő megjelnítése
+- felül sw verzió megjelenítése a főoldalon
+- fájl feltöltő alert eltávolítása
+- MQTT integráció befejezése
+- felesleges régi verziójú fájlok eltávolítása
+
+v0.1.6_build_1_20250403
+- mqtt adat kiírás javítása
+- mqtt csatlakozás javítása
+
+v0.1.5_build_1_20250402
+- webes felületről hozzáadva az mqtt beállítások
+
+v0.1.3_build_1_20240423
+- MQTT parancs javítás, minden parancs működik
+
+v0.0.8_20240417
+- MQTT parancs javítás
+
+0.0.6 LX790_V1_1 2024.04.04
+- Akku töltöttség jelzés fejlesztve
+
+0.0.5 LX790_V1_1 2024.04.01
+- Magyarítás
+- MQTT fejlesztés:
+                    - elküld: Akku, RSSI, mode, üzenet, SW__VER
+                    - fogad: START, DOCK, ezek nem igazán működnek
+
+0.0.4 LX790_V1_1 2023.11
+- Magyarítás
+
+0.0.3 LX790 (30.05.2022)
+
+- Anpassung auf Unterstützung für ESP Core Version 2.0.3
+
+0.0.2 LX790 (16.04.2022)
+
+- Debug (serial) per define schaltbar
+- Nur noch eine anstatt drei Webserver Instanzen/Ports
+- Kommentare aktualisiert
+- Nach Versorgung des ESPs wird der IO Taster "gehalten"
+  -> so muss nicht 5 Sekunden läng fürs Einschalten gedrückt gehalten werden
+- Während dem Start wird der Vorgang mit einem "Pxxx" im Display angezeigt, bis der I2C "übernimmt"
+- I2C Kommunikation verbessert
+- Anzeige des Ladezustands korrigiert
+- Reformat Text
+- Zeichen 't' ergänzt
+- Ausgabetexte "beruhigt"
+
+0.0.1 LX790 (03.11.2021)
+
+- Initiale Version
+
+... ToDo:
+
+- "OFF" Blinken
+- MQTT und URL Triggerung (Version piccer)
+- Boot up noch etwas unschön
+- Automatische Pineingabe bei bekanntem WLAN
+- IO Tasterabfrage und Ansteuerung zur Unterscheidung ob gedrückt wird oder der ESP nur versorgt wird
