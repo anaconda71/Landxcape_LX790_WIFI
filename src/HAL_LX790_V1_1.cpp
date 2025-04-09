@@ -9,14 +9,12 @@
 #include <AsyncTCP.h>
 #include <WiFiClient.h>
 
-//test
 
 #include <Arduino.h>
 #include <string.h>
 #include <ArduinoJson.h>
 #include <SPIFFS.h>
 
-//config.h-ba frissítsd a szoftver verziót
 #warning "Don't forget to update the software version in settings.h"
 
 WiFiClient espClient;

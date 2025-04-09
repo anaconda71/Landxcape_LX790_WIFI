@@ -6,19 +6,19 @@ This project helps to add WIFI function to your lawn mower.
 
 *The usage of the project is under your reponsibility. The programmers not takes reponsibles for any damages. This is not an official update of your robot.*
 
-- Some part of the GUI is in Hungarian version, not translated yet to English.
+- Some part of the GUI is in Hungarian version, not translated yet to English. This is in process.
 
 ### Further tasks on this repo
 - finalize the wiring diagram
 - translate the whole stuff to English
-- upda- add summary for MQTT commands
+- update add summary for MQTT commands
 - Add Home Assistant configuration.json example
 - finalize first data upload
 - document first time wifi config
 
 <p align="center">
   <img src=pic/Display.jpg height="450"/>
-  <img src=pic/Web_with_mower.png height="450"/>
+  <img src=pic/main_page.png height="450"/>
 </p>
 
 
