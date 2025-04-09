@@ -27,10 +27,9 @@ This project helps to add WIFI function to your lawn mower.
 - Read the display remotely
 - Show error messages easily
 - Remote control for the buttons
-- SPI communication between the lawn mower and teh ESP32
+- Communication between the lawn mower and the ESP32
 - Added MQTT function & web settings
 - Added wifi signal icon
-- No debugging, no syslog, no any other unneccessary thing
 - Easy control from a website
 - Home Assistant integration easily possible
 - Easily can be disable Hunter X2 wifi irrigation controller during lawn mowing
@@ -56,11 +55,6 @@ You must use Arduino IDE to flash the ESP32 first time.
   3. Restart arduino
 
 ##### ESP32 flash and update data:
-1. Open the .info file
+1. Open the .ino file
 2. Connect ESP32 via USB and choose the desired COM port
-3. In the ino code please modify your SSID:
-```c
-const char* ssid     = "DEINESSID";
-const char* password = "DEINPASSWORT";
-```
-4. Upload the "data" folder with 'Devices->ESP32 Sketch Data Upload' function
+3. Upload the "data" folder with 'Devices->ESP32 Sketch Data Upload' function
