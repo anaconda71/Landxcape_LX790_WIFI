@@ -15,6 +15,7 @@ This project helps to add WIFI function to your lawn mower.
 - Add Home Assistant configuration.json example
 - finalize first data upload
 - document first time wifi config
+- sense battery charging
 
 <p align="center">
   <img src=pic/Display.jpg height="450"/>
@@ -58,3 +59,86 @@ You must use Arduino IDE to flash the ESP32 first time.
 1. Open the .ino file
 2. Connect ESP32 via USB and choose the desired COM port
 3. Upload the "data" folder with 'Devices->ESP32 Sketch Data Upload' function
+
+##### Home Assistant integration
+Add the following lines into your configuration.yaml.
+Please don't forget to modify the MQTT topic to yours. My topic is "funyiro".
+```c
+mqtt:
+   lawn_mower:
+      name: "Lawn Mower"
+      unique_id: garden.funyiro
+      activity_state_topic: "funyiro/msg2"
+      #activity_value_template: "{{ value_json.activity }}"
+      pause_command_topic: "funyiro/cmd"
+      pause_command_template: "STOP"
+      dock_command_topic: "funyiro/cmd"
+      dock_command_template: "DOCK"
+      start_mowing_command_topic: "funyiro/cmd"
+      start_mowing_command_template: "START"
+
+   sensor:
+    - name: "Lawn Mower msg"
+      unique_id: garden.funyiro_msg
+      state_topic: "funyiro/msg"
+      
+    - name: "Lawn Mower state"
+      unique_id: garden.funyiro_mode
+      state_topic: "funyiro/mode"
+      
+    - name: "Lawn Mower RSSI"
+      unique_id: garden.funyiro_rssi
+      state_topic: "funyiro/rssi"
+      device_class: signal_strength
+      unit_of_measurement: "dBm"
+      
+    - name: "Lawn Mower battery"
+      unique_id: garden.funyiro_battery
+      state_topic: "funyiro/battery"
+      device_class: battery
+      unit_of_measurement: "%"
+```
+
+##### Disable Hunter irrigation with Home Assistant
+Add to automation.yaml, Hunter Hydrawise integration neccessary.
+```c
+- id: ''
+  alias: Disable irrigation during lawn mowing
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.funyiro_mode
+    to: LX790_RUNNING
+  conditions:
+  actions:
+  - action: hydrawise.suspend
+    metadata: {}
+    data:
+      until: '2029-12-17 08:00:00'
+    target:
+      device_id:
+      - select your zones to disable
+  mode: single
+- id: ''
+  alias: Enable irrigation when the LX790 in docking station
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.funyiro_mode
+    to: LX790_DOCKED
+  - trigger: state
+    entity_id:
+    - sensor.funyiro_mode
+    to: LX790_CHARGING
+  conditions:
+  actions:
+  - action: hydrawise.resume
+    metadata: {}
+    data: {}
+    target:
+      device_id:
+      - select your zone
+  mode: single
+  ```
