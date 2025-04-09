@@ -1,0 +1,129 @@
+html, body {
+  height: 100%;
+  margin: 0px;
+}
+h3, p {
+  margin: 0px;
+}
+td {
+  padding: 10px;
+}
+table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.menu_button {
+  background-color: #9c9c9c;
+  border: none;
+  color: black;
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.menu_button:hover {
+  background-color: #FFA500;
+  color: black;
+}
+
+.emo_menu_button {
+  background-color: #ff0000;
+  border: none;
+  color: black;
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  vertical-align: middle;
+  margin-top: 50px;
+}
+
+.emo_menu_button:hover {
+  background-color: #ff5252;
+  color: black;
+}
+
+.icon {
+  width: 20px;
+  vertical-align: middle;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+
+#container { max-width:600px; overflow:hidden;
+    height: auto;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
+}
+
+.button {
+  display: inline-block;
+  margin: 0.25em;
+  padding: 0.5em 1em;
+  font-size: 150%;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #FFA500;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px #cdcdcd;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+
+  .buttonSmall{
+  font-size: 100%;   
+  }
+.button:disabled {
+  background-color: #a0a0a0 !important;
+  }
+.button:hover {
+  background-color: #ffcb6a
+  }
+.button:active {
+    background-color: #fcefaa;
+    transform: translateY(2px);
+    box-shadow: 0px 0px #cdcdcd;
+    color: #000000;
+  }
+.buttonred {
+    background-color: #ff5252;
+  }
+.buttonred:hover {
+  background-color: #ff0000
+}
+.icon_column {
+  float: left;
+  padding: 5px;
+  margin: 10px;
+}
+
+/* Clearfix (clear floats) */
+.icon_row::after {
+  content: "";
+  clear: both;
+  display: table;
+}

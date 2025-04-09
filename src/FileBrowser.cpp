@@ -104,7 +104,9 @@ void handleFileDelete() {
     return server.send(404, "text/plain", path + " not found");
   }
   SPIFFS.remove(path);
-  server.send(200, "text/plain", path + " deleted");
+  //server.send(200, "text/plain", path + " deleted");
+  //<meta http-equiv="refresh" content="0; url=http://example.com/" />
+  server.send(200, "text/html", "<meta http-equiv='refresh' content='0; url=/update' />");
   path = String();
 }
 

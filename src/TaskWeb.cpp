@@ -12,10 +12,11 @@
 #include <ezTime.h>
 #include "LX790_util.h"
 #include "config.h"
+#include <Uptime.h>                                          // Library To Calculate Uptime
+Uptime uptime;                                               // Set The Call Name < Optional.
 
 
-
-
+Timezone timezone;
 
 // Copy "config_sample.h" to "config.h" and change it according to your setup.
 #include "config.h"
@@ -65,8 +66,14 @@ boolean captivePortal() {
 const char *jsonStatus() {
   //  handle NTP time
   String utcStr="---";
+  String customStr="---";
+  timezone.setLocation("Europe/Budapest");
   if ( ezt::timeStatus() == timeStatus_t::timeSet )
+  
     utcStr = UTC.dateTime("Y-m-d H:i:s T");
+    customStr = timezone.dateTime("Y-m-d H:i:s T");
+
+
 
   sprintf(out, "{\"time\":\"%s\", "
                   "\"runtime\":%0.1f, "
@@ -81,9 +88,10 @@ const char *jsonStatus() {
                   "\"cmdQueue\":%d, "
                   "\"wifi\":%d, \"rssi\":%d, \"hostname\":\"%s\", "
                   "\"msg\":\"%s\", "
+                  "\"uptime\":\"%d d %d h %d m %d s\", "
                   "\"sw_version\":\"%s\", "
                   "\"build\":\"%s %s\"}",
-    utcStr.c_str(),
+    customStr.c_str(),
     millis()/1000.0,
     state.updateTime/1000.0,
     state.segments[0],state.segments[1],state.segments[2],state.segments[3],
@@ -97,6 +105,7 @@ const char *jsonStatus() {
     state.wifi, WiFi.RSSI(),
     state.hostname.c_str(),
     state.msg.c_str(),
+    uptime.getDays(),uptime.getHours(),uptime.getMinutes(), uptime.getSeconds(), 
     SW_VER,
     __DATE__, __TIME__);
 
@@ -227,7 +236,7 @@ void TaskWeb( void * pvParameters )
   });
 
 
-  server.on("/update", HTTP_GET, []() {
+    server.on("/update", HTTP_GET, []() {
     server.setContentLength(CONTENT_LENGTH_UNKNOWN);
     server.send(200, "text/html", UPDATE_HTML);
 
@@ -235,8 +244,10 @@ void TaskWeb( void * pvParameters )
 
     File root = SPIFFS.open("/");
     File file = root.openNextFile();
+
+
     while(file) {
-      sprintf(out, "<li><a href='%s'>%s</a> (%s)  <b><a href='del?file=%s'>X</a></b></li>",
+      sprintf(out, "<tr><td><a href='%s'>%s</a></td><td>%s</td><td><a href='del?file=%s'>X</a></td></tr>",
         file.name(), file.name(),
         formatBytes(file.size()).c_str(),
         file.name()
@@ -244,7 +255,7 @@ void TaskWeb( void * pvParameters )
       server.sendContent(out);
       file = root.openNextFile();
     }
-    server.sendContent("</ul>");
+    server.sendContent("</table>");
 
     size_t total = SPIFFS.totalBytes();
     size_t used = SPIFFS.usedBytes();    
@@ -254,11 +265,13 @@ void TaskWeb( void * pvParameters )
     server.sendContent(" / Free: "); server.sendContent(formatBytes(total-used).c_str());
     server.sendContent("</p>");
 
-    server.sendContent("</body></html>");
+    server.sendContent("</div></div></div></div><script src='main.js'></script></body></html>");
     server.sendContent("");
 
      
   });
+
+
   server.on("/fileupload", HTTP_POST, []() {
     server.sendHeader("Location", "/update");
     server.send(301, "text/plain", "OK");
@@ -297,7 +310,7 @@ void TaskWeb( void * pvParameters )
   {
     // handle web server
     server.handleClient();
-
+    uptime.calculateUptime();
     // sync state
     if ( xQueueReceive(stateQueue, &state, 0) == pdTRUE ) {
       

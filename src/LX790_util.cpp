@@ -77,35 +77,36 @@ struct
   const char * Display;
   const LX790_Mode Mode;
   const char * Str;
+  const char * Str_en;
 } const LcdToMode[] =
 {
-  {"-F1-", LX790_RAIN,  "Eső miatti késleltetés"},
-  {"-E1-", LX790_ERROR, "A munkavégzés övezetén kívül rekedt"},
-  {"-E2-", LX790_ERROR, "Kerék elakadt"},
-  {"-E3-", LX790_ERROR, "Késtárcsa elakadt"},
-  {"-E4-", LX790_ERROR, "Fűnyíró megakadt"},
-  {"-E5-", LX790_ERROR, "Fűnyírót felemelték"},
-  {"-E6-", LX790_ERROR, "Fűnyírót felfordították"},
-  {"-E7-", LX790_ERROR, "Akku hiba"},
-  {"-E8-", LX790_ERROR, "Túl sokáig tart a dokkolóba visszaérkezés"},
-  {"-EE-", LX790_ERROR, "Ismeretlen hiba"},
-  {" OFF", LX790_OFF,   "Kikapcsol"},
-  {"STOP", LX790_STOP,  "Stop"},
-  {"IDLE", LX790_READY, "Várakozik"},
+  {"-F1-", LX790_RAIN,  "Eső miatti késleltetés", "Rain delay activated"},
+  {"-E1-", LX790_ERROR, "A munkavégzés övezetén kívül rekedt", "Mower outside work area"},
+  {"-E2-", LX790_ERROR, "Kerék elakadt", "Wheel motor blocked"},
+  {"-E3-", LX790_ERROR, "Késtárcsa elakadt", "Blade disc blocked"},
+  {"-E4-", LX790_ERROR, "Fűnyíró megakadt", "Mower trapped"},
+  {"-E5-", LX790_ERROR, "Fűnyírót felemelték", "Mower lifted up"},
+  {"-E6-", LX790_ERROR, "Fűnyírót felfordították", "Mower upside down"},
+  {"-E7-", LX790_ERROR, "Akku hiba", "Battery error"},
+  {"-E8-", LX790_ERROR, "Túl sokáig tart a dokkolóba visszaérkezés", "Takes too long to go back dock station"},
+  {"-EE-", LX790_ERROR, "Ismeretlen hiba", "Unknown error"},
+  {" OFF", LX790_OFF,   "Kikapcsolva", "Turned off"},
+  {"STOP", LX790_STOP,  "Megállítva", "Stopped"},
+  {"IDLE", LX790_READY, "Várakozik", "Waiting"},
 //  {"[  ]", LX790_DOCKED, "in Ladestation"},
 //  {"^^^^", LX790_BLOCKED, "Mähen... Hindernis..."},
-  {"Pin1", LX790_SET_PIN, "Új PIN"},
-  {"Pin2", LX790_SET_PIN, "Új PIN megerősítése"},
-  {"A 50", LX790_SET_AREA, "Terület 50m2 (kedd, péntek: 9:00-9:30)"},
-  {"A100", LX790_SET_AREA, "Terület 100m2 (kedd, péntek: 9:00-9:45)"},
-  {"A150", LX790_SET_AREA, "Terület 150m2 (hétfő, szerda, péntek: 9:00-9:45)"},
-  {"A200", LX790_SET_AREA, "Terület 200m2 (Hétfő-péntek: 9:00-9:45)"},
-  {"A300", LX790_SET_AREA, "Terület 300m2 (Hétfő-péntek: 9:00-10:00)"},
-  {"A400", LX790_SET_AREA, "Terület 400m2 (Hétfő-péntek: 9:00-10:15)"},
-  {"A500", LX790_SET_AREA, "Terület 500m2 (Hétfő-péntek: 9:00-10:45)"},
-  {"A600", LX790_SET_AREA, "Terület 600m2 (Hétfő-péntek: 9:00-11:00)"},
-  {" USB", LX790_USB,     "USB meghajtó észlelve"},
-  {nullptr, LX790_UNKNOWN, ""}
+  {"Pin1", LX790_SET_PIN, "Új PIN", "New PIN"},
+  {"Pin2", LX790_SET_PIN, "Új PIN megerősítése", "New PIN again"},
+  {"A 50", LX790_SET_AREA, "Terület 50m2 (kedd, péntek: 9:00-9:30)", "Area 50m2 (Tuesday, Friday: 9:00-9:30)"},
+  {"A100", LX790_SET_AREA, "Terület 100m2 (kedd, péntek: 9:00-9:45)", "Area 100m2 (Tuesday, Friday: 9:00-9:45)"},
+  {"A150", LX790_SET_AREA, "Terület 150m2 (hétfő, szerda, péntek: 9:00-9:45)", "Area 150m2 (Monday, Wednesday, Friday: 9:00-9:45)"},
+  {"A200", LX790_SET_AREA, "Terület 200m2 (Hétfő-péntek: 9:00-9:45)", "Area 200m2 (Monday-Friday: 9:00-9:45)"},
+  {"A300", LX790_SET_AREA, "Terület 300m2 (Hétfő-péntek: 9:00-10:00)", "Area 300m2 (Monday-Friday: 9:00-10:00)"},
+  {"A400", LX790_SET_AREA, "Terület 400m2 (Hétfő-péntek: 9:00-10:15)", "Area 400m2 (Monday-Friday: 9:00-10:15)"},
+  {"A500", LX790_SET_AREA, "Terület 500m2 (Hétfő-péntek: 9:00-10:45)", "Area 500m2 (Monday-Friday: 9:00-10:45)"},
+  {"A600", LX790_SET_AREA, "Terület 600m2 (Hétfő-péntek: 9:00-11:00)", "Area 600m2 (Monday-Friday: 9:00-11:00)"},
+  {" USB", LX790_USB,     "USB meghajtó észlelve", "USB drive detected"},
+  {nullptr, LX790_UNKNOWN, "Ismeretlen hiba", "Unknown error"}
 };
 
 

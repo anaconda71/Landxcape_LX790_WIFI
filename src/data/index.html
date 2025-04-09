@@ -1,88 +1,108 @@
-<!DOCTYPE HTML><html>
+<html>
 <head>
   <title>LX790 lawn mower Web</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta content="de" http-equiv="Content-Language" />
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-  <link rel="icon" type="image/png" href="robomower.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="robot-mower.png">
+  <link rel="stylesheet" href="style_new.css">
 </head>
 
 <body>
-  <div class="topnav">
-    <h1 id="hostname">LX790.1 Robotfonyiro</h1>
-    <div id="sw_version" class="info" style="font-size: 11px;"></div>
-  </div>
-  <div class="content">
-    <div class="card">
-        <table class="table" width="80%" cellpadding="0" cellspacing="0">
-           <tr>
-              <td id="sym1" width="20%"><img id="clock" style="display:block; height: 30px;" src="clock.png" /></td>
-              <td id="sym2" width="3%"> </td>
-              <td id="sym3" width="20%"><img id="wifi" style="display:block; height: 30px;" src="wifi_1.png" /></td>
-              <td id="sym4" width="3%"> </td>
-              <td id="sym5" width="20%"><img id="lock" style="display:block; height: 30px;" src="unlocked.png" /></td>
-              <td id="sym6" width="3%"> </td>
-              <td id="sym7" width="20%"><img id="bat" style="display:block; height: 25px;" src="bat_empty.png" /></td>
-           </tr>
-           <tr>
-              <td height="40px"></td>
-           </tr>
-           <tr class="segment">
-              <td id="seg1" width="20%">#</td>
-              <td id="gap1" width="3%"><div style="min-height: 50px;"></div></td>
-              <td id="seg2" width="20%">#</td>
-              <td id="gap2" width="3%">:</td>
-              <td id="seg3" width="20%">#</td>
-              <td id="gap3" width="3%"> </td>
-              <td id="seg4" width="20%">#</td>
-           </tr>
-        </table>
-        
-        <div id="msg" class="info">---</div>
-      <p>
-        <button name="io" id="btn_io" class="button">I/O</button>
-        <button name="start" id="btn_start" class="button">&#9650;</button>
-        <button name="home" id="btn_home" class="button">&#9660;</button>
-        <button name="ok" id="btn_ok" class="button">Ok</button>
-      </p>
-      <p>
-        <button name="startmow" id="btn_startmow" class="button">Inditas</button>
-        <button name="homemow" id="btn_homemow" class="button">Dokkolas</button>
-      </p>
-      <p>
-        <button name="stop" id="btn_stop" class="button buttonred">Stop</button>
-      </p>
+  <div style="overflow: hidden;">
+
+    <div style="float:left; width: 250px; border-right: 5px solid #FFA500; height: 100%; background-color: #b4b4b4; padding: 5px;">
+
+          <h3><img src="robot-mower.png" class="icon">LX790 lawn mower</h3>
+          <a href="/" class="menu_button"><img src="control.png" class="icon">Main page</a>
+          <a href="/config" class="menu_button"><img src="cogs.png" class="icon">Settings</a>
+          <a href="/update" class="menu_button"><img src="source-branch-sync.png" class="icon">Firmware upgrade</a>
+          <button name="reboot" id="btn_reboot" class="menu_button"><img src="restart.png" class="icon">Reboot</button>
+
+
+          <div class="icon_row">
+            <div class="icon_column">
+              <img id="clock" title="Clock" style="display:block; height: 25px;" src="clock.png" />
+            </div>
+            <div class="icon_column">
+              <img id="wifi" title="Wifi sinal strength" style="display:block; height: 25px;" src="wifi_1.png" />
+            </div>
+            <div class="icon_column">
+              <img id="lock" title="Unlock PIN status" style="display:block; height: 25px;" src="unlocked.png" />
+            </div>
+            <div class="icon_column">
+              <img id="bat" title="Battery state" style="display:block; height: 25px;" src="battery-low.png" />
+            </div>
+          </div>
+
+          <div id="msg" style="padding-left: 10px">---</div>
+
+
+          <button name="stop" id="btn_stop" class="emo_menu_button" style="font-size: 100%;">Emergency stop</button>
+
+          <div id="uptime" style="position: absolute; bottom: 20px; font-size: 13px;">Loading...</div>
+          <div id="sw_version" style="position: absolute; bottom: 5px; font-size: 13px;">Loading...</div>
+
     </div>
-    <br>
-    <div class="card secondary">
-      <div id="toggle_config" class="toggle_card">&#x1F6E0;</div>
-      <div id="config" > <!--class="hide"-->
-        <p>
-          <button name="workzone" id="btn_workzone" class="button buttonSmall">Munkaterület</button>
-          <button name="timedate" id="btn_timedate" class="button buttonSmall">Dátum, idő</button>
-          <button name="setpin" id="btn_setpin" class="button buttonSmall">Új PIN</button>
-          <button name="setstarttime" id="btn_setstarttime" class="button buttonSmall">Kezdési idő</button>
-        </p>
-        <hr>
-        <p>
-          <a href="update" class="button buttonSmall">Firmware frissítés</a>
-          <a href="config" class="button buttonSmall">Beallitasok</a>
-          <button name="reboot" id="btn_reboot" class="button buttonred buttonSmall">Újraindítás</button>
-        </p>
-      </div>
+    <div style="overflow: hidden; background-color: #cccccc; height: 100%">
+
+        <div>
+
+
+          <h2 style="text-align: center;">Main page</h2>
+
+
+          <div id="container">
+
+
+                <table class="table" width="80%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td height="40px"></td>
+                  </tr>
+                  <tr class="segment">
+                    <td id="seg1" width="20%">#</td>
+                    <td id="gap1" width="3%"><div style="min-height: 50px;"></div></td>
+                    <td id="seg2" width="20%">#</td>
+                    <td id="gap2" width="3%">:</td>
+                    <td id="seg3" width="20%">#</td>
+                    <td id="gap3" width="3%"> </td>
+                    <td id="seg4" width="20%">#</td>
+                  </tr>
+              </table>
+              
+              <p>
+                <button name="io" id="btn_io" class="button">I/O</button>
+                <button name="start" id="btn_start" class="button">&#9650;</button>
+                <button name="home" id="btn_home" class="button">&#9660;</button>
+                <button name="ok" id="btn_ok" class="button">Ok</button>
+              </p>
+              <p>
+                <button name="startmow" id="btn_startmow" class="button">Inditas</button>
+                <button name="homemow" id="btn_homemow" class="button">Dokkolas</button>
+              </p>
+              <p>
+                <button name="stop" id="btn_stop" class="button buttonred">Stop</button>
+              </p>
+              <p>
+
+                <button name="workzone" id="btn_workzone" class="button buttonSmall">Munkaterület</button>
+                <button name="timedate" id="btn_timedate" class="button buttonSmall">Dátum, idő</button>
+                <button name="setpin" id="btn_setpin" class="button buttonSmall">Új PIN</button>
+                <button name="setstarttime" id="btn_setstarttime" class="button buttonSmall">Kezdési idő</button>
+              </p>
+          </div>
+        </div>
+
+
+
     </div>
 
 
-    
+</div>
 
-
-
-
-  </div>
 
   <script>
-  let imgBatArr = ['bat_empty.png', 'bat_low.png', 'bat_mid.png', 'bat_full.png', 'bat_charging.gif'];
+  let imgBatArr = ['battery-empty.png', 'battery-low.png', 'battery-medium.png', 'battery-high.png', 'battery-charging.png'];
   let wifisignalArr = ['wifi_0.png','wifi_1.png', 'wifi_2.png', 'wifi_3.png', 'wifi_4.png'];
   let imgLockArr = ['unlocked.png', 'locked.png'];
   let status = {lock: -1, clock: -1, battery: -1};
@@ -150,7 +170,7 @@
       .then((response) => {
         return response.json()})
       .then((status) => {
-        setTimeout(ActValues, 200);
+        setTimeout(ActValues, 500);
 
         
         document.getElementById("seg1").textContent = status.digits[0];
@@ -186,6 +206,7 @@
         document.getElementById("msg").textContent = status.msg;
 
         document.getElementById("sw_version").textContent = "SW ver.: " + status.sw_version + " " + status.build;
+        document.getElementById("uptime").textContent = "ESP32 up: " + status.uptime;
         
         document.getElementById("hostname").textContent = status.hostname;
 

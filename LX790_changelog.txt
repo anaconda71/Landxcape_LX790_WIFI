@@ -2,6 +2,13 @@ fejlesztési lehetőségek:
 - akku fesz mérés
 - átrakni hogy az esp modul mindig kapjon tápot
 
+v2.2 
+- új webdesign
+- add uptime
+
+v2.1 
+- timezone beállítása európára (csak a status-nál van használatban, más haszna nincs)
+
 v2.0 
 - hely felszabadítása az ESP-n
 - ellegantota automatikus redirect

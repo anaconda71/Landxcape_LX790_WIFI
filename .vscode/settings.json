@@ -3,6 +3,7 @@
     "files.associations": {
         "functional": "cpp",
         "cstddef": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "random": "cpp"
     }
 }

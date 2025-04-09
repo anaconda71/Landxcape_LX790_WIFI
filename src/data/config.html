@@ -1,48 +1,178 @@
-<!DOCTYPE HTML><html>
+<html>
 <head>
-  <title>LX790 fűnyíró beállítások</title>
+  <title>LX790 lawn mower Web</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta content="de" http-equiv="Content-Language">
-  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-  <link rel="icon" type="image/png" href="robomower.png">
-  <link rel="stylesheet" href="style.css">
+  <meta content="de" http-equiv="Content-Language" />
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <link rel="icon" type="image/png" href="robot-mower.png">
+  <link rel="stylesheet" href="style_new.css">
 </head>
 
 <body>
-  <div class="topnav">
-    <h1 id="hostname">LX790.1 Robotfűnyíró beálíltások</h1>
-    <h3><a href="/">[vissza]</a></h3>
-  </div>
-  <div class="content">
-    <div class="card config">
-      <h2>Általános beállítások</h2>
-      <label for="cfg_name">Hosztnév:</label> <input type="text" id="cfg_name" name="name" placeholder="LX79x" ><br>
-      <label for="cfg_pin">Fűnyíró PIN:</label> <input type="password" id="cfg_pin" name="pin" placeholder="1234" maxlength="4" > <button class="togglePassword" for="cfg_pin"">&#x1F441;</button> <br>
-      <label for="cfg_captivePortal">WEB login:</label> <input type="checkbox" id="cfg_captivePortal" name="captivePortal" ><br>
-      <label for="cfg_portalPassword">WEB jelszó:</label> <input type="text" id="cfg_portalPassword" name="portalPassword" placeholder="portal" ><br>
-      <label for="cfg_portalTimeout">Portál timeout [s]:</label> <input type="number" id="cfg_portalTimeout" name="portalTimeout" placeholder="600" ><br>
+  <div> <!--style="overflow: hidden;"-->
+
+    <div style="float:left; width: 250px; border-right: 5px solid #FFA500; height: 100%; background-color: #b4b4b4; padding: 5px;">
+
+          <h3><img src="robot-mower.png" class="icon">LX790 lawn mower</h3>
+          <a href="/" class="menu_button"><img src="control.png" class="icon">Main page</a>
+          <a href="/config" class="menu_button"><img src="cogs.png" class="icon">Settings</a>
+          <a href="/update" class="menu_button"><img src="source-branch-sync.png" class="icon">Firmware upgrade</a>
+          <button name="reboot" id="btn_reboot" class="menu_button"><img src="restart.png" class="icon">Reboot</button>
+
+
+          <div class="icon_row">
+            <div class="icon_column">
+              <img id="clock" title="Clock" style="display:block; height: 25px;" src="clock.png" />
+            </div>
+            <div class="icon_column">
+              <img id="wifi" title="Wifi sinal strength" style="display:block; height: 25px;" src="wifi_1.png" />
+            </div>
+            <div class="icon_column">
+              <img id="lock" title="Unlock PIN status" style="display:block; height: 25px;" src="unlocked.png" />
+            </div>
+            <div class="icon_column">
+              <img id="bat" title="Battery state" style="display:block; height: 25px;" src="battery-low.png" />
+            </div>
+          </div>
+
+          <div id="msg" style="padding-left: 10px">---</div>
+
+
+          <button name="stop" id="btn_stop" class="emo_menu_button" style="font-size: 100%;">Emergency stop</button>
+
+          <div id="uptime" style="position: absolute; bottom: 20px; font-size: 13px;">Loading...</div>
+          <div id="sw_version" style="position: absolute; bottom: 5px; font-size: 13px;">Loading...</div>
+
     </div>
-    <div class="card config">
-      <h2>Wifi beállítások</h2>
-      <label for="cfg_wifiSSID">SSID:</label> <input type="text" id="cfg_wifiSSID" name="wifiSSID" placeholder="SSID" ><br>
-      <label for="cfg_wifiPassword">Jelszó:</label> <input type="password" id="cfg_wifiPassword" name="wifiPassword" placeholder="password" > <button class="togglePassword" for="cfg_wifiPassword">&#x1F441;</button><br>
+    <div style="background-color: #cccccc; height: 100%;overflow-x: scroll;overflow-y: scroll;">
+
+        <div>
+
+
+          <h2 style="text-align: center;">LX790.1 ESP32 settings</h2>
+
+
+          <div id="container" style="width: 800px">
+
+            <div style="margin: 10px; padding: 5px; background-color: white; border-left:#9c9c9c solid 5px;">To reload theese kind of modifications, ESP module will be rebooted automatically after click Save button.</div>
+
+            <table cellpadding="0" cellspacing="0">
+              <tr>
+                <td colspan="2" align="center" style="font-weight: bold; font-size: 25px;">General settings</td>
+              </tr>
+              <tr>
+                <td>Hostname</td>
+                <td><input type="text" id="cfg_name" name="name" placeholder="LX79x" >
+                </td>
+              </tr>
+              <tr>
+                <td>PIN code</td>
+                <td><input type="password" id="cfg_pin" name="pin" placeholder="1234" maxlength="4" > <button class="togglePassword" for="cfg_pin"">&#x1F441;</button>
+                </td>
+              </tr>
+              <tr>
+                <td>Enable WEB login</td>
+                <td><input type="checkbox" id="cfg_captivePortal" name="captivePortal" >
+                </td>
+              </tr>
+              <tr>
+                <td>WEB password</td>
+                <td><input type="text" id="cfg_portalPassword" name="portalPassword" placeholder="portal" >
+                </td>
+              </tr>
+              <tr>
+                 <td>Portal timeout [s]</td>
+                 <td> <input type="number" id="cfg_portalTimeout" name="portalTimeout" placeholder="600" ></td>
+              </tr> 
+           </table>
+           
+           <table cellpadding="0" cellspacing="0">
+            <tr>
+              <td colspan="2" align="center" style="font-weight: bold; font-size: 25px;">Wireless settings</td>
+            </tr>
+            <tr>
+              <td>SSID</td>
+              <td><input type="text" id="cfg_wifiSSID" name="wifiSSID" placeholder="SSID" >
+              </td>
+            </tr>
+            <tr>
+              <td>Password</td>
+              <td><input type="password" id="cfg_wifiPassword" name="wifiPassword" placeholder="password" > <button class="togglePassword" for="cfg_wifiPassword">&#x1F441;</button>
+              </td>
+            </tr>
+         </table>
+
+
+         <table cellpadding="0" cellspacing="0">
+          <tr>
+            <td colspan="2" align="center" style="font-weight: bold; font-size: 25px;">General settings</td>
+          </tr>
+          <tr>
+            <td>MQTT server IP adress</td>
+            <td><input type="text" id="cfg_mqtt_server_ip" name="mqtt_server_ip" placeholder="MQTT_IP" >
+            </td>
+          </tr>
+          <tr>
+            <td>MQTT port</td>
+            <td><input type="text" id="cfg_mqtt_port" name="mqtt_port" placeholder="1883" >
+            </td>
+          </tr>
+          <tr>
+            <td>MQTT user</td>
+            <td><input type="text" id="cfg_mqtt_user" name="mqtt_user" placeholder="MQTT_user" >
+            </td>
+          </tr>
+          <tr>
+            <td>MQTT password</td>
+            <td><input type="password" id="cfg_mqtt_password" name="mqtt_password" placeholder="password" > <button class="togglePassword" for="cfg_mqtt_password">&#x1F441;</button>
+            </td>
+          </tr>
+          <tr>
+             <td>MQTT topic</td>
+             <td> <input type="text" id="cfg_mqtt_topic" name="mqtt_topic" placeholder="mqtt_topic" ></td>
+          </tr> 
+       </table>
+
+       <button id="btn_save" class="button buttonSmall">Save</button>
+          </div>
+        </div>
+
+
+
     </div>
-    <div class="card config">
-      <h2>MQTT beállítások</h2>
-      <label for="cfg_mqtt_server_ip">MQTT szerver IP:</label> <input type="text" id="cfg_mqtt_server_ip" name="mqtt_server_ip" placeholder="MQTT_IP" ><br>
-      <label for="cfg_mqtt_port">MQTT szerver port:</label> <input type="text" id="cfg_mqtt_port" name="mqtt_port" placeholder="MQTT_port" ><br>
-      <label for="cfg_mqtt_user">MQTT user:</label>  <input type="text" id="cfg_mqtt_user" name="mqtt_user" placeholder="MQTT_user" ><br>
-      <label for="cfg_mqtt_password">Jelszó:</label> <input type="password" id="cfg_mqtt_password" name="mqtt_password" placeholder="password" > <button class="togglePassword" for="cfg_mqtt_password">&#x1F441;</button><br>
-      <label for="cfg_mqtt_topic">MQTT topic:</label> <input type="text" id="cfg_mqtt_topic" name="mqtt_topic" placeholder="mqtt_topic" ><br>
-    </div>
-    <P>A mentés gombra kattintva az ESP32 újraindul.</P>
-    <button id="btn_save" class="button buttonSmall">Mentés</button>
-  </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   <script>
 
-    function togglePassword(event) {
+function togglePassword(event) {
       var targetId = event.srcElement.getAttribute("for");
       if ( targetId ) {
         var input = document.getElementById(targetId);
@@ -73,6 +203,21 @@
             }
           }
         });
+
+
+        console.log('...init');
+    for (var el of document.querySelectorAll(".toggle_card") ) {
+      el.addEventListener("click",  ActionToggleCard);
+    }
+
+    for (var btn of document.getElementsByTagName("button") ) {
+      initButton(btn);
+    }
+
+
+    ActValues();
+
+    
 
       // save config
       document.getElementById("btn_save").addEventListener("click", ()=>{
@@ -115,6 +260,115 @@
         }
       }
     }
+
+
+
+  let imgBatArr = ['battery-empty.png', 'battery-low.png', 'battery-medium.png', 'battery-high.png', 'battery-charging.png'];
+  let wifisignalArr = ['wifi_0.png','wifi_1.png', 'wifi_2.png', 'wifi_3.png', 'wifi_4.png'];
+  let imgLockArr = ['unlocked.png', 'locked.png'];
+  let status = {lock: -1, clock: -1, battery: -1};
+  
+  window.addEventListener('load', onLoad);
+  
+  function ActionToggleCard(event)
+  {
+    card = event.srcElement;
+    while ( !card.classList.contains('card') ) {
+      card = card.parentNode;
+    }
+
+    for (var el of card.children ) {
+      if ( !el.classList.contains('toggle_card') ) {
+        el.classList.toggle('hide');
+      }
+    }
+  }
+
+  function initButton(btn)
+  {
+    btn.addEventListener("mousedown",  ActionButtonOn);
+    btn.addEventListener("mouseup",    ActionButtonOff);
+    btn.addEventListener("mouseleave", ActionButtonOff);
+  }
+  function ActionButtonOn() 
+  {
+    console.log(this.name + " pressed");
+    fetch("/cmd?parm="+this.name+"&value=1");
+  }
+  function ActionButtonOff() 
+  {
+    console.log(this.name + " released");
+    fetch("/cmd?parm="+this.name+"&value=0");
+  }  
+  function ActionCheckbox() 
+  {
+    var val = this.checked ? 1 : 0;
+    console.log(this.name + " checked: " + val);
+    fetch("/cmd?parm="+this.name+"&value="+val);
+    this.indeterminate = true;
+  }    
+
+  let oldStatus = {};
+  function ActValues()
+  {
+    var xhr = new XMLHttpRequest();
+
+    fetch("/status")
+      .then((response) => {
+        return response.json()})
+      .then((status) => {
+        setTimeout(ActValues, 500);
+
+        
+
+        if ( status.lock != oldStatus.lock )
+          document.getElementById("lock").src = imgLockArr[status.lock];
+        if ( status.clock != oldStatus.clock )
+          document.getElementById("clock").style.visibility = (status.clock ? 'visible' : 'hidden');
+        if ( status.mode == "LX790_CHARGING" )
+          status.battery = 4;
+        if ( status.battery != oldStatus.battery )
+        document.getElementById("bat").src = imgBatArr[status.battery];
+
+        var signal_level=0;
+        /*-59 felett 4
+        -70 felett 3
+        -80 felett 2
+        -90 felett 1*/
+        if(status.rssi > -59)
+          signal_level = 4;
+        else if(status.rssi > -70)
+          signal_level = 3;
+        else if(status.rssi > -82)
+          signal_level = 2;
+        else if(status.rssi > -90)
+          signal_level = 1;
+
+        document.getElementById("wifi").src = wifisignalArr[signal_level];
+
+        document.getElementById("msg").textContent = status.msg;
+
+        document.getElementById("sw_version").textContent = "SW ver.: " + status.sw_version + " " + status.build;
+        document.getElementById("uptime").textContent = "ESP32 up: " + status.uptime;
+        
+        document.getElementById("hostname").textContent = status.hostname;
+
+        if ( status.cmdQueue != oldStatus.cmdQueue ) {
+          const btns = document.getElementsByClassName("button");
+          for (let i = 0; i < btns.length; i++) {
+            if ( !btns[i].classList.contains("buttonred") ) {
+              btns[i].disabled = (status.cmdQueue > 0);
+            }
+          }
+        }
+
+        oldStatus = status;
+
+      })
+      .catch((error) => {
+        setTimeout(ActValues, 10000);
+      });      
+  }
   </script>
 </body>
 
