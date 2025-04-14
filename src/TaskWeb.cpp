@@ -8,15 +8,12 @@
 #include "SPIFFS.h"
 #include "FileBrowser.h"
 #include <Update.h>
-#define EZTIME_EZT_NAMESPACE
-#include <ezTime.h>
 #include "LX790_util.h"
 #include "config.h"
 #include <Uptime.h>                                          // Library To Calculate Uptime
 Uptime uptime;                                               // Set The Call Name < Optional.
 
 
-Timezone timezone;
 
 // Copy "config_sample.h" to "config.h" and change it according to your setup.
 #include "config.h"
@@ -64,19 +61,9 @@ boolean captivePortal() {
 
 
 const char *jsonStatus() {
-  //  handle NTP time
-  String utcStr="---";
-  String customStr="---";
-  timezone.setLocation("Europe/Budapest");
-  if ( ezt::timeStatus() == timeStatus_t::timeSet )
-  
-    utcStr = UTC.dateTime("Y-m-d H:i:s T");
-    customStr = timezone.dateTime("Y-m-d H:i:s T");
 
 
-
-  sprintf(out, "{\"time\":\"%s\", "
-                  "\"runtime\":%0.1f, "
+  sprintf(out, "{\"runtime\":%0.1f, "
                   "\"updateTime\":%0.1f, "
                   "\"segments\":[%d,%d,%d,%d], "
                   "\"digits\":\"%c%c%c%c\", "
@@ -91,7 +78,6 @@ const char *jsonStatus() {
                   "\"uptime\":\"%d d %d h %d m %d s\", "
                   "\"sw_version\":\"%s\", "
                   "\"build\":\"%s %s\"}",
-    customStr.c_str(),
     millis()/1000.0,
     state.updateTime/1000.0,
     state.segments[0],state.segments[1],state.segments[2],state.segments[3],
@@ -324,9 +310,6 @@ void TaskWeb( void * pvParameters )
 
       
     }
-
-    // handle NTP
-    ezt::events();
 
     delay(10);
   }

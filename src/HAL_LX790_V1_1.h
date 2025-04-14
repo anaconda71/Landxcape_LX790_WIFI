@@ -51,13 +51,14 @@
  *  |       |
  *   -- 4 --
  */
-#define SEG1 0x01
-#define SEG2 0x02
-#define SEG3 0x04
-#define SEG4 0x08
-#define SEG5 0x10
-#define SEG6 0x20
-#define SEG7 0x40
+#define SEG1 0x01 //00000001
+#define SEG2 0x02 //00000010
+#define SEG3 0x04 //00000100
+#define SEG4 0x08 //00001000
+#define SEG5 0x10 //00010000
+#define SEG6 0x20 //00100000
+#define SEG7 0x40 //01000000
+
 
 // Buttons Pins
 #define BTN_PIN_IO    27	// Cable #3
@@ -65,4 +66,3 @@
 #define BTN_PIN_HOME  32	// Cable #16
 #define BTN_PIN_OK    33	// Cable #13
 #define BTN_PIN_STOP  26	// Cable #9 & #11
-

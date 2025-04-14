@@ -1,6 +1,6 @@
 Future updates:
 - battery voltage measurement
-- hq modify esp32 power supply to get power when the mower turned off
+- hw modify esp32 power supply to get power when the mower turned off
 - remove ntp
 
 v2.4

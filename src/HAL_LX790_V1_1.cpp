@@ -327,7 +327,7 @@ void HAL_loop(LX790_State &state) {
       client.publish(tmp_topic.c_str(), msg_out);
     /*}
     old_rssi = rssi;*/
-
+    
     char msg_out2[20];
     int batval = 0;
     switch (state.battery)

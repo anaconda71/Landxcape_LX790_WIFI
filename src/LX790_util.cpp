@@ -17,6 +17,10 @@
  *   -- 4 --
  */
 
+uint8_t last_bat_state = 10; //Give not real battery start value to force first update
+uint8_t previous_segment[4] = {0,0,0,0};
+uint8_t detmode_count = 0, detmode_home_cnt = 0, detmode_run_cnt = 0;
+
 #ifndef SEG1
   #define SEG1 0
   #define SEG2 0
@@ -69,12 +73,9 @@ struct
   {0, 0 }
 };
 
-unsigned long last_bat_millis = 0;
-uint8_t last_bat_state = 9;
-unsigned long bat_diff_time = 0;
+
 bool return_to_dock = false;
 
-char previous_seg[4];
 
 /*****************************************************************************/
 struct
@@ -257,52 +258,101 @@ void decodeDisplay(LX790_State &state) {
           lastModeUpdate = time; 
       }
     } else if ( compareDigits(state.digits, "[  ]") ) { // display shows box -> in docking station, charging?
-      /*static uint8_t oldBattery = 0;
-      if ( state.battery != oldBattery || (state.mode == LX790_CHARGING && delta < 10000) ) {
-        detectedMode = LX790_CHARGING;
-        state.msg = "Töltés";
-        state.msg2 = "docked"; //mowing, paused, docked, and error
-        if (state.battery != oldBattery)
-          lastModeUpdate = time; 
-      } else {
-        detectedMode = LX790_DOCKED;
-        state.msg = "Dokkolóban";
-        state.msg2 = "docked"; //mowing, paused, docked, and error
-      }
-      oldBattery = state.battery;
-      detectedMode = LX790_DOCKED; // FIXME overwrite mode (charging detection is not reliable)*/
-      //mower in docking station
-
       return_to_dock = false;
 
-      bat_diff_time = millis() - last_bat_millis;
-      if(bat_diff_time > 10000)
+      if(state.battery == 0 && last_bat_state == 3 || state.battery == 1 && last_bat_state == 0 || state.battery == 2 && last_bat_state == 1 || state.battery == 3 && last_bat_state == 2) 
       {
-        //mower charged
-        
-        detectedMode = LX790_DOCKED;
-        state.msg = "Dokkolóban";
-        state.msg2 = "docked"; //mowing, paused, docked, and error
-      }else
-      {
-        //mower charging
         detectedMode = LX790_CHARGING;
         state.msg = "Töltés";
-        state.msg2 = "docked"; //mowing, paused, docked, and error
+      }else
+      {
+        detectedMode = LX790_DOCKED;
+        state.msg = "Dokkolóban";
       }
       
-      if(last_bat_state != state.battery)
-      {
-        last_bat_state = state.battery;
-        last_bat_millis = millis();
-      }
+      last_bat_state = state.battery;
 
+      detmode_count = 0;
+      detmode_home_cnt = 0;
+      detmode_run_cnt = 0;
     } else if ( state.mode != LX790_ERROR && state.mode != LX790_RAIN ) {
       if ( segCnt == 1  || (state.mode == LX790_RUNNING && delta < 5000) ) {  // only one dash / segment active , or empty display and was running -> running
+
+/*
+ * segments:
+ *
+ *   -- 1 --
+ *  |       |
+ *  6       2
+ *  |       |
+ *   -- 7 --
+ *  |       |
+ *  5       3
+ *  |       |
+ *   -- 4 --
+ */
+//uint8_t detmode_count = 0, detmode_home_cnt = 0, detmode_run_cnt = 0;
+/*detmode_count++;
+if ( 
+  (state.segments[1] == 1 && previous_segment[1] == 1) ||
+  (state.segments[1] == 32 && previous_segment[0] == 1) ||
+  (state.segments[1] == 16 && previous_segment[0] == 32) || 
+  (state.segments[0] == 8 && previous_segment[0] == 16) ||
+  (state.segments[0] == 8 && previous_segment[1] == 8) ||
+  (state.segments[1] == 8 && previous_segment[2] == 8) ||
+  (state.segments[3] == 8 && previous_segment[3] == 8) ||
+  (state.segments[3] == 4 && previous_segment[3] == 8) ||
+  (state.segments[3] == 2 && previous_segment[3] == 4) ||
+  (state.segments[3] == 1 && previous_segment[3] == 2) ||
+  (state.segments[2] == 1 && previous_segment[3] == 1) ||
+  (state.segments[1] == 1 && previous_segment[2] == 1) ||
+  (state.segments[0] == 1 && previous_segment[1] == 0) ||
+  (state.segments[0] == 32 && previous_segment[0] == 1) ||
+  (state.segments[0] == 16 && previous_segment[0] == 32)
+ )
+{
+  //jobbra forog
+
+  detmode_home_cnt++;
+}
+else
+{
+  //balra forog
+
+  detmode_run_cnt++;
+}
+
+previous_segment[0] = state.segments[0];
+previous_segment[1] = state.segments[1];
+previous_segment[2] = state.segments[2];
+previous_segment[3] = state.segments[3];
+
+//get avg
+if(detmode_count == 10)
+{
+  if(detmode_home_cnt > detmode_run_cnt)
+  {
+    detectedMode = LX790_RETURN_DOCK;
+    state.msg = "Visszatérés a dokkolóra";
+    state.msg2 = "mowing"; //mowing, paused, docked, and error
+  }else
+  {
+    detectedMode = LX790_RUNNING;
+    state.msg = "Fűnyírás";
+    state.msg2 = "mowing"; //mowing, paused, docked, and error
+  }
+
+  detmode_count = 0;
+  detmode_home_cnt = 0;
+  detmode_run_cnt = 0;
+}
+*/
 
         if(return_to_dock == true)
         {
           detectedMode = LX790_RETURN_DOCK;
+          state.msg = "Visszatérés a dokkolóra";
+          state.msg2 = "mowing"; //mowing, paused, docked, and error
         }
         else
         {
