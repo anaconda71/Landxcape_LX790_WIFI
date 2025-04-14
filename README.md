@@ -11,7 +11,6 @@ This project helps to add WIFI function to your lawn mower.
 ### Further tasks on this repo
 - finalize the wiring diagram
 - translate the whole stuff to English
-- update add summary for MQTT commands
 - Add Home Assistant configuration.json example
 - finalize first data upload
 - document first time wifi config
@@ -34,6 +33,20 @@ This project helps to add WIFI function to your lawn mower.
 - Easy control from a website
 - Home Assistant integration easily possible
 - Easily can be disable Hunter X2 wifi irrigation controller during lawn mowing
+
+### MQTT Summary
+Send to the broker:
+- your_topic/battery  -> Battery level in %
+- your_topic/rssi     -> RSSI in dBm
+- your_topic/mode     -> LX790 mode
+- your_topic/msg      -> LX790 actual message
+- your_topic/msg2     -> LX790 actual message for HA integration
+- your_topic/SW_VER   -> ESP32 current SW
+
+Send to LX790
+- your_topic/CMD      -> STOP, START, DOCK
+
+your_topic can be set up on the web config portal.
 
 ### Requirements
 #### Hardware

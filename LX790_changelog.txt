@@ -1,6 +1,7 @@
-fejlesztési lehetőségek:
-- akku fesz mérés
-- átrakni hogy az esp modul mindig kapjon tápot
+Future updates:
+- battery voltage measurement
+- hq modify esp32 power supply to get power when the mower turned off
+- remove ntp
 
 v2.4
 - battery charge detection improvement
@@ -13,26 +14,25 @@ v2.3
 - send mqtt data only when value differ from previous
 
 v2.2 
-- új webdesign
+- new webdesign
 - add uptime
 
 v2.1 
-- timezone beállítása európára (csak a status-nál van használatban, más haszna nincs)
+- set ntp timezone to europe (used in status, can be removed in the future)
 
 v2.0 
-- hely felszabadítása az ESP-n
-- ellegantota automatikus redirect
-- update.html törlése
-- ellegantota eltávolítása
-- régi hw_model eltávolítása
-- lx790_util.cpp pin beírás ok gomb után time rnövelés 250ms-ről 400-ra
+- create free space on esp
+- ellegantota remove
+- update.html rm
+- old hw_model remove
+- lx790_util.cpp automatic enter pin bug fix
 - remove autounlock tick if wifi present, always unlock automatically
 
 v1.9
-- mqtt adatok webes felületen történő megadása
+- mqtt settings can be modified via web
 
 v1.8
-- hibajavítások
+- bug fixes
 
 v0.1.7
 - buildok megszűnése, build dátum automatizálása
