@@ -185,7 +185,7 @@ void HAL_setup()
   tm1668.setDataMode(SPI_MODE1);
   tm1668.setSlaveFlags(SPI_SLAVE_BIT_LSBFIRST);
   tm1668.begin(VSPI, CLK_PIN_DISPLAY, VSPI_MISO, DIO_PIN_DISPLAY, CS_PIN_DISPLAY);
-//  tm1668.begin(HSPI);
+
 
   pinMode(CS_PIN_DISPLAY, INPUT);
   pinMode(DIO_PIN_DISPLAY, INPUT);
@@ -224,20 +224,8 @@ void reconnect() {
   }
 }
 
-int period = 1000;
 unsigned long time_now = 0;
 unsigned long previousTime = 0;
-
-
-
-int old_rssi = 0;
-uint8_t old_batval = 105;
-LX790_Mode old_mode = LX790_UNKNOWN;
-LX790_Mode old_detectedMode = LX790_UNKNOWN;  
-String old_msg = "x";
-String old_msg2 = "x";
-String old_waitcmd = "x";
-
 
 void HAL_loop(LX790_State &state) {
   static LX790_State oldState = {0};

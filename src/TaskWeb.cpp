@@ -1,8 +1,6 @@
 #include <Arduino.h>
 #include <string.h>
 #include <Wire.h>
-//#include "CRC16.h"
-#include "CRC.h"
 #include <WiFi.h>
 #include <WebServer.h>
 #include "SPIFFS.h"
@@ -10,19 +8,15 @@
 #include <Update.h>
 #include "LX790_util.h"
 #include "config.h"
-#include <Uptime.h>                                          // Library To Calculate Uptime
-Uptime uptime;                                               // Set The Call Name < Optional.
-
-
-
-// Copy "config_sample.h" to "config.h" and change it according to your setup.
+#include <Uptime.h>
 #include "config.h"
+
+Uptime uptime;
+
 
 WebServer server(80);
 static char out[512];
 LX790_State state;
-
-
 
 const char *UPDATE_HTML =
   #include "update.html.h"
