@@ -292,6 +292,9 @@ void decodeDisplay(LX790_State &state) {
 
       last_bat_state = state.battery;
 
+      
+      state.msg2 = "docked";
+
       detmode_count = 0;
       detmode_home_cnt = 0;
       detmode_run_cnt = 0;
