@@ -38,12 +38,14 @@ if (String(topic) == tmp_topic) {
   CMD_Type cmd;
   if(messageTemp == "START"){
     queueButton(BTN_START, 250);
+    return_to_dock = false;
     cmd = {CMD_Type::WAIT, 250}; xQueueSend(cmdQueue, &cmd, 0);
     queueButton(BTN_OK, 250);
     
     client.publish(tmp_topic.c_str(), "WAIT_CMD");
   }
     else if(messageTemp == "DOCK"){
+      return_to_dock = true;
       queueButton(BTN_STOP, 250);
       cmd = {CMD_Type::WAIT, 1500}; xQueueSend(cmdQueue, &cmd, 0);
       queueButton(BTN_HOME, 250);
@@ -53,6 +55,7 @@ if (String(topic) == tmp_topic) {
       client.publish(tmp_topic.c_str(), "WAIT_CMD");
     }else if(messageTemp == "STOP"){
       //stop
+      return_to_dock = false;
       queueButton(BTN_STOP, 250);
       client.publish(tmp_topic.c_str(), "WAIT_CMD");
     }
@@ -202,6 +205,7 @@ void HAL_setup()
   //init MQTT
   client.setServer(config.mqtt_server_ip.c_str(), config.mqtt_port.toInt());//config.mqtt_server_ip.c_str() config.mqtt_port.toInt()
   client.setCallback(callback_mqtt);
+
 }
 
 void reconnect() {
@@ -223,6 +227,17 @@ void reconnect() {
 int period = 1000;
 unsigned long time_now = 0;
 unsigned long previousTime = 0;
+
+
+
+int old_rssi = 0;
+uint8_t old_batval = 105;
+LX790_Mode old_mode = LX790_UNKNOWN;
+LX790_Mode old_detectedMode = LX790_UNKNOWN;  
+String old_msg = "x";
+String old_msg2 = "x";
+String old_waitcmd = "x";
+
 
 void HAL_loop(LX790_State &state) {
   static LX790_State oldState = {0};
@@ -292,14 +307,26 @@ void HAL_loop(LX790_State &state) {
     /* Event code */
     
 
-
-    int rssi = WiFi.RSSI();
-    char msg_out[20];
-    sprintf(msg_out, "%d",rssi);
-
+  
     tmp_topic = "";
-    tmp_topic = config.mqtt_topic + "/rssi";
-    client.publish(tmp_topic.c_str(), msg_out);
+    tmp_topic = config.mqtt_topic + "/SW_VER";
+    client.publish(tmp_topic.c_str(), SW_VER);
+  
+    tmp_topic = "";
+    tmp_topic = config.mqtt_topic + "/cmd";
+    client.publish(tmp_topic.c_str(), "WAIT_CMD");
+    
+    int rssi = WiFi.RSSI();
+    /*if(old_rssi != rssi)
+    {*/
+      char msg_out[20];
+      sprintf(msg_out, "%d",rssi);
+
+      tmp_topic = "";
+      tmp_topic = config.mqtt_topic + "/rssi";
+      client.publish(tmp_topic.c_str(), msg_out);
+    /*}
+    old_rssi = rssi;*/
 
     char msg_out2[20];
     int batval = 0;
@@ -328,40 +355,47 @@ void HAL_loop(LX790_State &state) {
       default:
         batval = 0;
     }
-    sprintf(msg_out2, "%d",batval);
-    tmp_topic = "";
-    tmp_topic = config.mqtt_topic + "/battery";
-    client.publish(tmp_topic.c_str(), msg_out2);
+    /*if(old_batval != batval)
+    {*/
+      sprintf(msg_out2, "%d",batval);
+      tmp_topic = "";
+      tmp_topic = config.mqtt_topic + "/battery";
+      client.publish(tmp_topic.c_str(), msg_out2);
+    /*}
+    old_batval = batval;*/
 
-    tmp_topic = "";
-    tmp_topic = config.mqtt_topic + "/mode";
-    client.publish(tmp_topic.c_str(), ModeNames[state.detectedMode]);
+    /*if(old_detectedMode != state.detectedMode)
+    {*/
+      tmp_topic = "";
+      tmp_topic = config.mqtt_topic + "/mode";
+      client.publish(tmp_topic.c_str(), ModeNames[state.detectedMode]);
+    /*}
+    old_detectedMode = state.detectedMode;
 
-    int str_len = state.msg.length() + 1; 
-    char msg_out3[str_len];
-    state.msg.toCharArray(msg_out3, str_len);
+    if(old_msg != state.msg)
+    {*/
+      int str_len = state.msg.length() + 1; 
+      char msg_out3[str_len];
+      state.msg.toCharArray(msg_out3, str_len);
 
-    tmp_topic = "";
-    tmp_topic = config.mqtt_topic + "/msg";
-    client.publish(tmp_topic.c_str(), msg_out3);
+      tmp_topic = "";
+      tmp_topic = config.mqtt_topic + "/msg";
+      client.publish(tmp_topic.c_str(), msg_out3);
+    /*}
+    old_msg = state.msg;
 
-    int str_len2 = state.msg2.length() + 1; 
-    char msg_out32[str_len];
-    state.msg2.toCharArray(msg_out32, str_len2);
+    if(old_msg2 != state.msg2)
+    {*/
+      int str_len2 = state.msg2.length() + 1; 
+      char msg_out32[str_len2];
+      state.msg2.toCharArray(msg_out32, str_len2);
 
-    tmp_topic = "";
-    tmp_topic = config.mqtt_topic + "/msg2";
-    client.publish(tmp_topic.c_str(), msg_out32);
+      tmp_topic = "";
+      tmp_topic = config.mqtt_topic + "/msg2";
+      client.publish(tmp_topic.c_str(), msg_out32);
+    /*}
+    old_msg2 = state.msg2;*/
 
-    tmp_topic = "";
-    tmp_topic = config.mqtt_topic + "/SW_VER";
-    client.publish(tmp_topic.c_str(), SW_VER);
-
-    tmp_topic = "";
-    tmp_topic = config.mqtt_topic + "/cmd";
-    client.publish(tmp_topic.c_str(), "WAIT_CMD");
-
-    
    /* Update the timing for the next time around */
     previousTime = time_now;
   }

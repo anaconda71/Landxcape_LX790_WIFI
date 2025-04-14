@@ -134,6 +134,7 @@ void Web_getCmd()
     if (param == "reboot" && val) {
       cmd = {CMD_Type::REBOOT, 200}; xQueueSend(cmdQueue, &cmd, 0);
     } else if (param == "startmow" && val) {
+      return_to_dock = false;
       queueButton(BTN_START, 250);
       cmd = {CMD_Type::WAIT, 250}; xQueueSend(cmdQueue, &cmd, 0);
       queueButton(BTN_OK, 250);
@@ -141,6 +142,7 @@ void Web_getCmd()
       queueButton(BTN_HOME, 250);
       cmd = {CMD_Type::WAIT, 250}; xQueueSend(cmdQueue, &cmd, 0);
       queueButton(BTN_OK, 250);
+      return_to_dock = true;
     } else if (param == "workzone" && val) {
       queueButton(BTN_OK, 4500);
     } else if (param == "timedate" && val) {
@@ -163,7 +165,7 @@ void Web_getCmd()
       cmd = {CMD_Type::AUTOUNLOCK, val}; xQueueSend(cmdQueue, &cmd, 0);
     } else {
       // @todo prioritize emergency stop !!!
-
+      //return_to_dock = false;
       for (int i=1; ButtonNames[i]; i++)
       {
         if (param == ButtonNames[i])

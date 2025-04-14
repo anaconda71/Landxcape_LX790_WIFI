@@ -69,7 +69,12 @@ struct
   {0, 0 }
 };
 
+unsigned long last_bat_millis = 0;
+uint8_t last_bat_state = 9;
+unsigned long bat_diff_time = 0;
+bool return_to_dock = false;
 
+char previous_seg[4];
 
 /*****************************************************************************/
 struct
@@ -151,6 +156,8 @@ struct
   {"P1n2", "Pin2"},
   {" U56", " USB"},
   {"U56 ", " USB"},
+  {"  _ ", "  _ "},
+  {" _  ", " _  "},
   {nullptr,""}
 };
 
@@ -193,8 +200,8 @@ void decodeDisplay(LX790_State &state) {
   unsigned long time = millis();
   unsigned long delta = time - lastModeUpdate;
   static bool unlockPin = true;
-  state.msg = "";
-  state.msg2 = "";
+  //state.msg = "";
+  //state.msg2 = "";
 
   // process segments
   int segCnt=0;
@@ -250,7 +257,7 @@ void decodeDisplay(LX790_State &state) {
           lastModeUpdate = time; 
       }
     } else if ( compareDigits(state.digits, "[  ]") ) { // display shows box -> in docking station, charging?
-      static uint8_t oldBattery = 0;
+      /*static uint8_t oldBattery = 0;
       if ( state.battery != oldBattery || (state.mode == LX790_CHARGING && delta < 10000) ) {
         detectedMode = LX790_CHARGING;
         state.msg = "Töltés";
@@ -263,17 +270,51 @@ void decodeDisplay(LX790_State &state) {
         state.msg2 = "docked"; //mowing, paused, docked, and error
       }
       oldBattery = state.battery;
-      detectedMode = LX790_DOCKED; // FIXME overwrite mode (charging detection is not reliable)
+      detectedMode = LX790_DOCKED; // FIXME overwrite mode (charging detection is not reliable)*/
+      //mower in docking station
+
+      return_to_dock = false;
+
+      bat_diff_time = millis() - last_bat_millis;
+      if(bat_diff_time > 10000)
+      {
+        //mower charged
+        
+        detectedMode = LX790_DOCKED;
+        state.msg = "Dokkolóban";
+        state.msg2 = "docked"; //mowing, paused, docked, and error
+      }else
+      {
+        //mower charging
+        detectedMode = LX790_CHARGING;
+        state.msg = "Töltés";
+        state.msg2 = "docked"; //mowing, paused, docked, and error
+      }
+      
+      if(last_bat_state != state.battery)
+      {
+        last_bat_state = state.battery;
+        last_bat_millis = millis();
+      }
+
     } else if ( state.mode != LX790_ERROR && state.mode != LX790_RAIN ) {
       if ( segCnt == 1  || (state.mode == LX790_RUNNING && delta < 5000) ) {  // only one dash / segment active , or empty display and was running -> running
-        // running
-        detectedMode = LX790_RUNNING;
-        state.msg = "Fűnyírás";
-        state.msg2 = "mowing"; //mowing, paused, docked, and error
-        for (int i = 0; i<4; i++)
+
+        if(return_to_dock == true)
+        {
+          detectedMode = LX790_RETURN_DOCK;
+        }
+        else
+        {
+          detectedMode = LX790_RUNNING;
+          state.msg = "Fűnyírás";
+          state.msg2 = "mowing"; //mowing, paused, docked, and error
+        }
+
+        /*for (int i = 0; i<4; i++)
         {
           state.digits[i] = state.segments[i] ? ' ' : '*';
-        }
+        }*/
         if (segCnt == 1)
           lastModeUpdate = time;
       }
