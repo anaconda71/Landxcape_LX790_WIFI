@@ -258,8 +258,9 @@ void decodeDisplay(LX790_State &state) {
           lastModeUpdate = time; 
       }
     } else if ( compareDigits(state.digits, "[  ]") ) { // display shows box -> in docking station, charging?
-        return_to_dock = false;
-      
+      return_to_dock = false;
+        //here lx790 is docked, should be find out in the future charged or charging
+
         detectedMode = LX790_DOCKED;
         state.msg = "Dokkolóban";
         state.msg2 = "docked";
