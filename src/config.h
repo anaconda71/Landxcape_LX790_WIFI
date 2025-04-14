@@ -3,7 +3,7 @@
 #define LX790_V1_1 0x11
 
 
-#define SW_VER "v2.4"
+#define SW_VER "v2.5"
 
 
 #define DEBUG_SERIAL_PRINT 0

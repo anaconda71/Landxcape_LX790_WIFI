@@ -3,10 +3,14 @@ Future updates:
 - hw modify esp32 power supply to get power when the mower turned off
 - remove ntp
 
+v2.5
+- battery charge detection improvement
+
 v2.4
 - battery charge detection improvement
 - send LX790_RETURN_DOCK MQTT
-- send battery status and rssi always via MQTT
+- send data always via MQTT not only if changed (better to home assistant)
+- removed ntp
 
 v2.3
 - stop empty status msg

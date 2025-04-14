@@ -259,17 +259,37 @@ void decodeDisplay(LX790_State &state) {
       }
     } else if ( compareDigits(state.digits, "[  ]") ) { // display shows box -> in docking station, charging?
       return_to_dock = false;
-
-      if(state.battery == 0 && last_bat_state == 3 || state.battery == 1 && last_bat_state == 0 || state.battery == 2 && last_bat_state == 1 || state.battery == 3 && last_bat_state == 2) 
+      if(last_bat_state != state.battery)
       {
-        detectedMode = LX790_CHARGING;
-        state.msg = "Töltés";
-      }else
+      if(state.battery == 3)
       {
-        detectedMode = LX790_DOCKED;
-        state.msg = "Dokkolóban";
+        
+          if(last_bat_state < 3) 
+          {
+            detectedMode = LX790_CHARGING;
+            state.msg = "Töltés";
+          }else
+          {
+            detectedMode = LX790_DOCKED;
+            state.msg = "Dokkolóban";
+          }
+        
       }
       
+      if(state.battery == 0)
+      {
+        if(last_bat_state > 0) 
+        {
+          detectedMode = LX790_CHARGING;
+          state.msg = "Töltés";
+        }else
+        {
+          detectedMode = LX790_DOCKED;
+          state.msg = "Dokkolóban";
+        }
+      }
+    }
+
       last_bat_state = state.battery;
 
       detmode_count = 0;
