@@ -114,6 +114,11 @@ void Web_getCmd()
     if (param == "reboot" && val) {
       cmd = {CMD_Type::REBOOT, 200}; xQueueSend(cmdQueue, &cmd, 0);
     } else if (param == "startmow" && val) {
+      if(return_to_dock == true)
+      {
+        cmd = {CMD_Type::BTN_PRESS, BTN_STOP}; xQueueSend(cmdQueue, &cmd, 0);
+        cmd = {CMD_Type::WAIT, 500}; xQueueSend(cmdQueue, &cmd, 0);
+      }
       return_to_dock = false;
       queueButton(BTN_START, 250);
       cmd = {CMD_Type::WAIT, 250}; xQueueSend(cmdQueue, &cmd, 0);

@@ -16,7 +16,7 @@
  *  |       |
  *   -- 4 --
  */
-unsigned long time_now_millis, last_bat_time = 0;
+unsigned long time_source_code = 0, last_bat_time = 0;
 uint8_t last_bat_state = 10; //Give not real battery start value to force first update
 
 
@@ -259,11 +259,34 @@ void decodeDisplay(LX790_State &state) {
     } else if ( compareDigits(state.digits, "[  ]") ) { // display shows box -> in docking station, charging?
       return_to_dock = false;
         //here lx790 is docked, should be find out in the future charged or charging
-
-
+      time_source_code++;
+      if(time_source_code > 4200000000)
+      time_source_code = 0;
+        
+      if(time_source_code > 2000)
+      {
+        //value fixed, charged
         state.msg2 = "docked";
         detectedMode = LX790_DOCKED;
         state.msg = "Dokkolóban";
+      }else
+      {
+        //value not fixed, charging
+        state.msg2 = "docked";
+        detectedMode = LX790_CHARGING;
+        state.msg = "Töltődik";
+      }
+
+      if(state.battery != last_bat_state)
+      {
+        time_source_code = 0;
+      }
+      last_bat_state = state.battery;
+
+      /*
+        state.msg2 = "docked";
+        detectedMode = LX790_DOCKED;
+        state.msg = "Dokkolóban";*/
 
     } else if ( state.mode != LX790_ERROR && state.mode != LX790_RAIN ) {
       if ( segCnt == 1  || (state.mode == LX790_RUNNING && delta < 5000) ) {  // only one dash / segment active , or empty display and was running -> running

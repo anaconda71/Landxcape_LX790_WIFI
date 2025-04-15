@@ -3,6 +3,13 @@ Future updates:
 - hw modify esp32 power supply to get power when the mower turned off
 - remove ntp
 
+v2.5.1
+- battery charge detection improvement (millis not work in core 0)
+- handle start when the commend given during return to dock
+
+v2.5.1
+- battery charge detection improvement (millis not work in core 0)
+
 v2.5
 - battery charge detection improvement
 

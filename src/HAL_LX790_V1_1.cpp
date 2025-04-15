@@ -37,12 +37,17 @@ if (String(topic) == tmp_topic) {
   tmp_topic = config.mqtt_topic + "/cmd";
   CMD_Type cmd;
   if(messageTemp == "START"){
+    if(return_to_dock == true)
+    {
+      queueButton(BTN_STOP, 250);
+      cmd = {CMD_Type::WAIT, 1500}; xQueueSend(cmdQueue, &cmd, 0);
+    }
     queueButton(BTN_START, 250);
-    return_to_dock = false;
     cmd = {CMD_Type::WAIT, 250}; xQueueSend(cmdQueue, &cmd, 0);
     queueButton(BTN_OK, 250);
     
     client.publish(tmp_topic.c_str(), "WAIT_CMD");
+    return_to_dock = false;
   }
     else if(messageTemp == "DOCK"){
       return_to_dock = true;
